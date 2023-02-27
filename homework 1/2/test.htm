@@ -1,0 +1,16 @@
+<!doctype html>
+<script type="module">
+  import {bigSum, bigSubtraction, bigMultiplication, bigDivision} from './BigNum.js';
+  
+  let big1 = "498273649872369876348273646982376482736589734689573469583746583742349823769283769823749827689236496492831231232131"
+  let big2 = "12341283498123782103728107392810792810379281037492108372134287281492172817482137927498213498137498294871239"
+
+  document.body.innerHTML = "bigSum(big1, big2):" + "\"<br />\""
+  document.body.innerHTML += bigSum(big1, big2) + "\"<br />\"";
+  document.body.innerHTML += "bigSubtraction(big1, big2):" + "\"<br />\""
+  document.body.innerHTML += bigSubtraction(big1, big2) + "\"<br />\"";
+  document.body.innerHTML += "bigMultiplication(big1, big2):" + "\"<br />\""
+  document.body.innerHTML += bigMultiplication(big1, big2) + "\"<br />\"";
+  document.body.innerHTML += "bigDivision(big1, big2):" + "\"<br />\""
+  document.body.innerHTML += bigDivision(big1, big2);
+</script>

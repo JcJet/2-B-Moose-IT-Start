@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+<script type="module">
+  import {ucFirst, fixSpaces, getWordCount, getWordList} from './stringMethods.js';
+
+  let task1 = "ВАСЯ"
+  let task1Result = ucFirst(task1)
+  document.body.innerHTML = task1 + " => " + task1Result + "\"<br />\"";
+  document.body.innerHTML += "\"<br />\""
+
+  let task2 = "Вот пример строки,в которой     используются знаки препинания.После знаков должны стоять пробелы , а перед знаками их быть не должно . " +
+          "Если есть лишние подряд идущие пробелы, они должны быть устранены.";
+  let task2Result = fixSpaces(task2)
+  document.body.innerHTML += task2 + " => " + "\"<br />\"" + task2Result + "\"<br />\"";
+  document.body.innerHTML += "\"<br />\""
+
+  let task3 = task2Result;
+  let task3Result = getWordCount(task3);
+  document.body.innerHTML += task3 + "\"<br />\""+ " Word Count: " + task3Result + "\"<br />\"";
+  document.body.innerHTML += "\"<br />\""
+
+  let task4 = task3 + "Вот пример строки строки вот вот";
+  let task4Result = getWordList(task4);
+  var task4ResultToString = "";
+  for (var x in task4Result) {
+    task4ResultToString += (x + ": " + task4Result[x] + "; ");
+  };
+  document.body.innerHTML += task4 + " => " + "\"<br />\"" + task4ResultToString;
+
+</script>
+</body>
