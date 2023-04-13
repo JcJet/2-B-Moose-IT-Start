@@ -1,0 +1,137 @@
+services:
+  hw4:
+    build:
+      context: .
+      dockerfile: ./apps/hw4/Dockerfile
+      target: development
+    command: npm run start:dev hw4
+    env_file:
+      - ./apps/hw4/.env
+    depends_on:
+      - postgresql-master
+      - postgresql-slave
+      - rabbitmq
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    ports:
+      - '3000:3000'
+  users:
+    build:
+      context: .
+      dockerfile: ./apps/users/Dockerfile
+      target: development
+    command: npm run start:dev users
+    env_file:
+      - ./apps/users/.env
+    depends_on:
+      - postgresql-master
+      - postgresql-slave
+      - rabbitmq
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+
+  profiles:
+    build:
+      context: .
+      dockerfile: ./apps/profiles/Dockerfile
+      target: development
+    command: npm run start:dev profiles
+    env_file:
+      - ./apps/profiles/.env
+    depends_on:
+      - postgresql-master
+      - postgresql-slave
+      - rabbitmq
+      - users
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    ports:
+      - '3001:3001'
+  auth:
+    build:
+      context: .
+      dockerfile: ./apps/auth/Dockerfile
+      target: development
+    command: npm run start:dev auth
+    env_file:
+      - ./apps/auth/.env
+    depends_on:
+      - postgresql-master
+      - postgresql-slave
+      - rabbitmq
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+
+  texts:
+    build:
+      context: .
+      dockerfile: ./apps/texts/Dockerfile
+      target: development
+    command: npm run start:dev texts
+    env_file:
+      - ./apps/texts/.env
+    depends_on:
+      - postgresql-master
+      - postgresql-slave
+      - rabbitmq
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+
+  files:
+    build:
+      context: .
+      dockerfile: ./apps/files/Dockerfile
+      target: development
+    command: npm run start:dev files
+    env_file:
+      - ./apps/files/.env
+    depends_on:
+      - postgresql-master
+      - postgresql-slave
+      - rabbitmq
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+
+  rabbitmq:
+    image: rabbitmq
+    ports:
+      - '5672:5672'
+
+  postgresql-master:
+    image: docker.io/bitnami/postgresql:15
+    ports:
+      - '5432'
+    volumes:
+      - 'postgresql_master_data:/bitnami/postgresql'
+    environment:
+      - POSTGRESQL_REPLICATION_MODE=master
+      - POSTGRESQL_REPLICATION_USER=repl_user
+      - POSTGRESQL_REPLICATION_PASSWORD=repl_password
+      - POSTGRESQL_USERNAME=postgres
+      - POSTGRESQL_PASSWORD=my_password
+      - POSTGRESQL_DATABASE=my_database
+      - ALLOW_EMPTY_PASSWORD=yes
+  postgresql-slave:
+    image: docker.io/bitnami/postgresql:15
+    ports:
+      - '5432'
+    depends_on:
+      - postgresql-master
+    environment:
+      - POSTGRESQL_REPLICATION_MODE=slave
+      - POSTGRESQL_REPLICATION_USER=repl_user
+      - POSTGRESQL_REPLICATION_PASSWORD=repl_password
+      - POSTGRESQL_MASTER_HOST=postgresql-master
+      - POSTGRESQL_PASSWORD=my_password
+      - POSTGRESQL_MASTER_PORT_NUMBER=5432
+      - ALLOW_EMPTY_PASSWORD=yes
+
+volumes:
+  postgresql_master_data:
+    driver: local
